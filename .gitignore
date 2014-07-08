@@ -1,0 +1,10 @@
+*~
+*.pyc
+cookies.txt
+passwords.txt
+passwords.csv
+config.ini
+*.sqlite3
+build
+dist
+*.egg-info

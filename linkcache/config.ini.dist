@@ -1,0 +1,29 @@
+[db]
+type: sqlite3 or mysql
+
+[shortener]
+type: iorek
+
+[sqlite3]
+filename: /path/to/sqlite.db
+
+[mysql]
+host: host
+name: name
+user: user
+password: password
+
+[twitter]
+consumer_key: get
+consumer_secret: these
+access_token_key: from
+access_token_secret: twitter
+
+[burrowiki]
+loginpage: url
+user: user
+password: password
+
+[browser]
+cookiejar: /path/to/cookies.txt
+passwords: /path/to/passwords.csv
