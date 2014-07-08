@@ -5,13 +5,6 @@ import os
 import csv
 import gzip
 
-configtemplate = {
-    'browser' : {
-        'cookiejar' : None,
-        'passwords' : None,
-    },
-}
-
 # This is a singleton browser implementation
 
 class SingletonBrowser:

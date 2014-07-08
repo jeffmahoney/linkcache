@@ -1,14 +1,4 @@
 #!/usr/bin/env python
-
-configtemplate = {
-    'mysql' : {
-        'host' : None,
-        'db' : None,
-        'user' : None,
-        'password' : None,
-    }
-}
-
 import sql
 import MySQLdb
 
