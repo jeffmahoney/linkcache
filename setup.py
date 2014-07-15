@@ -10,7 +10,7 @@ setup(
     },
 
     install_requires = [
-        "twitter",
+        "python_twitter",
         "mechanize",
     ],
 
