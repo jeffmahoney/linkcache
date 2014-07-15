@@ -3,6 +3,7 @@ import sql
 import MySQLdb
 
 class LinkMySql(sql.LinkSql):
+    field_placeholder = "%s"
     def __init__(self, host, db, user, passwd):
         sql.LinkSql.__init__(self)
 

@@ -6,6 +6,7 @@ import time
 class LinkSql(db.LinkDb):
     def __init__(self):
         db.LinkDb.__init__(self)
+        assert('field_placeholder' in dir(self))
 
     def create_tables(self):
         q  = r"CREATE TABLE url ("
@@ -33,7 +34,8 @@ class LinkSql(db.LinkDb):
 
     def update(self, id, field, value):
         args = [value, id]
-        query = """UPDATE url SET %s = ? WHERE id = ?""" % field
+        query = """UPDATE url SET %s = %s WHERE id = %s""" % (field,
+                self.field_placeholder, self.field_placeholder)
         self.execute(query, args)
 
     def update_shorturl(self, id, shorturl):
@@ -41,7 +43,8 @@ class LinkSql(db.LinkDb):
         self.execute(query, [shorturl, id])
 
     def increment_count(self, id):
-        query = """UPDATE url SET count = count + 1 WHERE id = ?"""
+        query = """UPDATE url SET count = count + 1 WHERE id = %s""" % \
+                self.field_placeholder
         self.execute(query, [id])
 
     def new_entry(self, url, shorturl, user, title, flags=0, type=None,
@@ -67,7 +70,7 @@ class LinkSql(db.LinkDb):
             fields += ", channel"
             args.append(channel)
 
-        values = ", ".join(['?'] * len(args))
+        values = ", ".join([self.field_placeholder] * len(args))
         query = """INSERT INTO url (%s) VALUES(%s)""" % (fields, values)
 
         self.execute(query, args)
@@ -94,12 +97,12 @@ class LinkSql(db.LinkDb):
         query  = """SELECT url, user, count, first_seen as 'ts [timestamp]', """
         query += """title, CURRENT_TIMESTAMP as 'ts [timestamp]', alive, """
         query += """flags, private, type, description, shorturl, id """
-        query += """FROM url WHERE %s = ?""" % field
+        query += """FROM url WHERE %s = %s""" % (field, self.field_placeholder)
 
         args = [value]
 
         if channel is not None:
-            query += " AND channel = ?"
+            query += " AND channel = %s" % self.field_placeholder
             args.append(channel)
 
         row = self.query_one(query, args)
