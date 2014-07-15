@@ -44,16 +44,16 @@ class LinkSql(db.LinkDb):
                 self.field_placeholder
         self.execute(query, [id])
 
-    def new_entry(self, url, shorturl, user, title, flags=0, type=None,
+    def new_entry(self, url, shorturl, user, title, flags=0, content_type=None,
                   description=None, channel="", private=0):
 
         args = [url, shorturl, user, title, flags]
 
         fields = """url, shorturl, user, title, flags"""
 
-        if type is not None:
+        if content_type is not None:
             fields += ", type"
-            args.append(type)
+            args.append(content_type)
 
         if description is not None:
             fields += ", description"
