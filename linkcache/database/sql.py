@@ -20,7 +20,7 @@ class LinkSql(db.LinkDb):
         q += r"flags INT, "
         q += r"type TEXT, "
         q += r"description TEXT, "
-        q += r"channel TEXT DEFAULT '', "
+        q += r"channel TEXT, "
         q += r"private INT DEFAULT 0, "
         q += r"count INT DEFAULT 1, "
         q += r"alive INT DEFAULT 1 "
