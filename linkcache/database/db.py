@@ -5,6 +5,9 @@ class LinkDb:
     def update(self, id, field, value):
         pass
 
+    def update_shorturl(self, id, shorturl):
+        self.update(id, 'shorturl', shorturl)
+
     def set_title(self, id, title):
         self.update(id, 'title', title)
 

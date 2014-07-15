@@ -38,10 +38,6 @@ class LinkSql(db.LinkDb):
                 self.field_placeholder, self.field_placeholder)
         self.execute(query, args)
 
-    def update_shorturl(self, id, shorturl):
-        query = """UPDATE url SET shorturl = ? WHERE id = ?"""
-        self.execute(query, [shorturl, id])
-
     def increment_count(self, id):
         query = """UPDATE url SET count = count + 1 WHERE id = %s""" % \
                 self.field_placeholder
