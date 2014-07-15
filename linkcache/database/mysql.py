@@ -11,7 +11,7 @@ class LinkMySql(sql.LinkSql):
         self.db = config['name']
         self.user = config['user']
         self.passwd = config['password']
-        self.retries = 2
+        self.retries = 1
 
         try:
             self.connect()
@@ -24,23 +24,29 @@ class LinkMySql(sql.LinkSql):
                                 charset='utf8')
 
     def execute(self, command, args):
-        for i in range(0, self.retries):
+        for i in range(0, self.retries + 1):
             try:
                 cursor = self.connection.cursor()
                 cursor.execute(command, args)
                 self.connection.commit()
             except MySQLdb.OperationalError, e:
-                self.connect()
+                if i < self.retries:
+                    self.connect()
+                else:
+                    raise
             else:
                 break
 
     def query_one(self, command, args):
-        for i in range(0, self.retries):
+        for i in range(0, self.retries + 1):
             try:
                 cursor = self.connection.cursor()
                 cursor.execute(command, args)
             except MySQLdb.OperationalError, e:
-                self.connect()
+                if i < self.retries:
+                    self.connect()
+                else:
+                    raise
             else:
                 break
 
