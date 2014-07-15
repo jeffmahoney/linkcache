@@ -17,7 +17,7 @@ class LinkMySql(sql.LinkSql):
         try:
             self.connect()
         except ImportError, e:
-            raise Error("you need python-mysql installed")
+            raise UserWarning("you need python-mysql installed")
 
     def connect(self):
         self.connection = MySQLdb.connect(db=self.db, user=self.user,
@@ -56,6 +56,6 @@ class LinkMySql(sql.LinkSql):
         elif cursor.rowcount == 0:
             return None
 
-        raise Error("Invalid SQL results: %d results, expected 0 or 1" % cursor.rowcount)
+        raise IndexError("Invalid SQL results: %d results, expected 0 or 1" % cursor.rowcount)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:

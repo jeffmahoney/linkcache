@@ -306,7 +306,7 @@ class LinkCache:
 
         result = self.fetch_by_url(url, channel)
         if result is None:
-            raise Exception("Failed to fetch new entry after adding")
+            raise RuntimeWarning("Failed to fetch new entry after adding")
 
         shorturl = self.shortener.post_shorten(url, result.id)
         if shorturl:
