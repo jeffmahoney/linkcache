@@ -7,10 +7,11 @@ class LinkSql(db.LinkDb):
     def __init__(self, config):
         db.LinkDb.__init__(self, config)
         assert('field_placeholder' in dir(self))
+        assert('auto_increment' in dir(self))
 
     def create_tables(self):
         q  = r"CREATE TABLE url ("
-        q += r"id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        q += r"id INTEGER PRIMARY KEY %s, " % self.auto_increment
         q += r"url TEXT NOT NULL, "
         q += r"shorturl TEXT, "
         q += r"user TEXT NOT NULL, "

@@ -3,6 +3,7 @@ import sql
 import MySQLdb
 
 class LinkMySql(sql.LinkSql):
+    auto_increment = "AUTO_INCREMENT"
     field_placeholder = "%s"
     def __init__(self, config):
         sql.LinkSql.__init__(self, config)
