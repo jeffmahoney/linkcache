@@ -47,30 +47,31 @@ class LinkSql(db.LinkDb):
     def new_entry(self, url, shorturl, user, title, flags=0, content_type=None,
                   description=None, channel="", private=0):
 
-        args = [url, shorturl, user, title, flags]
-
-        fields = """url, shorturl, user, title, flags"""
+        data = {
+            'url' : url,
+            'shorturl' : "",
+            'user' : user,
+            'title' : title,
+            'flags' : flags,
+        }
 
         if content_type is not None:
-            fields += ", type"
-            args.append(content_type)
+            data['type'] = content_type
 
         if description is not None:
-            fields += ", description"
-            args.append(description)
+            data['description'] = description
 
         if private != 0:
-            fields += ", private"
-            args.append(private)
+            data['private'] = private
 
         if channel:
-            fields += ", channel"
-            args.append(channel)
+            data['channel'] = channel
 
-        values = ", ".join([self.field_placeholder] * len(args))
-        query = """INSERT INTO url (%s) VALUES(%s)""" % (fields, values)
+        columns = ', '.join(data.keys())
+        values = ', '.join([self.field_placeholder] * len(data))
+        query = "INSERT INTO url (%s) VALUES (%s)" % (columns, values)
 
-        self.execute(query, args)
+        self.execute(query, tuple(data.values()))
 
     @staticmethod
     def row_to_result(row):
