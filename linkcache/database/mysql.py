@@ -4,20 +4,19 @@ import MySQLdb
 
 class LinkMySql(sql.LinkSql):
     field_placeholder = "%s"
-    def __init__(self, host, db, user, passwd):
-        sql.LinkSql.__init__(self)
+    def __init__(self, config):
+        sql.LinkSql.__init__(self, config)
 
-        self.host = host
-        self.db = db
-        self.user = user
-        self.passwd = passwd
+        self.host = config['host']
+        self.db = config['name']
+        self.user = config['user']
+        self.passwd = config['password']
         self.retries = 2
 
         try:
             self.connect()
         except ImportError, e:
             raise Error("you need python-mysql installed")
-
 
     def connect(self):
         self.connection = MySQLdb.connect(db=self.db, user=self.user,
