@@ -58,4 +58,6 @@ class LinkMySql(sql.LinkSql):
 
         raise IndexError("Invalid SQL results: %d results, expected 0 or 1" % cursor.rowcount)
 
+instantiate = LinkMySql
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
