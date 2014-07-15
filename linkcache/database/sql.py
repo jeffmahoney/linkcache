@@ -25,7 +25,7 @@ class LinkSql(db.LinkDb):
         q += r"count INT DEFAULT 1, "
         q += r"alive INT DEFAULT 1 "
         q += r" )"
-        self.execute(q, [])
+        self.execute(q, ())
 
     def execute(self, command, args):
         pass
@@ -34,7 +34,7 @@ class LinkSql(db.LinkDb):
         pass
 
     def update(self, id, field, value):
-        args = [value, id]
+        args = (value, id)
         query = """UPDATE url SET %s = %s WHERE id = %s""" % (field,
                 self.field_placeholder, self.field_placeholder)
         self.execute(query, args)
@@ -42,7 +42,7 @@ class LinkSql(db.LinkDb):
     def increment_count(self, id):
         query = """UPDATE url SET count = count + 1 WHERE id = %s""" % \
                 self.field_placeholder
-        self.execute(query, [id])
+        self.execute(query, (id, ))
 
     def new_entry(self, url, shorturl, user, title, flags=0, content_type=None,
                   description=None, channel="", private=0):
