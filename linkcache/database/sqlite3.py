@@ -7,6 +7,7 @@ from pysqlite2 import dbapi2 as sqlite3
 class LinkSqlite(sql.LinkSql):
     field_placeholder = "?"
     def __init__(self, config):
+        sql.LinkSql.__init__(self, config)
         self.filename = config['filename']
         self.db = None
         self.retries = 2

@@ -4,8 +4,8 @@ import db
 import time
 
 class LinkSql(db.LinkDb):
-    def __init__(self):
-        db.LinkDb.__init__(self)
+    def __init__(self, config):
+        db.LinkDb.__init__(self, config)
         assert('field_placeholder' in dir(self))
 
     def create_tables(self):
