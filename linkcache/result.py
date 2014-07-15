@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
 from datetime import datetime
+import re
+
+F_SPOILERS = 0x4
+F_NSFW = 0x2
+F_MAYBE_NSFW = 0x1
 
 class LinkCacheResult:
     def __init__(self, result={}):
@@ -85,52 +90,54 @@ class LinkCacheResult:
 
         return ago
 
-    def __str__(self, with_description=True):
-        desc = ""
-        if self.title:
-            desc += '(' + self.title.replace("\n", "") + ')'
-        elif self.description:
-            desc += '(' + self.description.replace("\n", "") + ')'
-        if self.count > 1:
-            if desc != "":
-                desc += " "
-            alive = ""
-            if not self.alive:
-                alive = " DEAD"
-            desc += "[%dx, %s, %s%s] " % (self.count, self.user,
-                                          self.timeAgo(), alive)
-        str = self.shorturl
-        if with_description:
-            str += "\n" + desc
+    def pretty_flags(self):
+        flags = []
+        if self.nsfw & F_NSFW:
+            flags.append("NSFW")
+        elif self.nsfw & F_MAYBE_NSFW:
+            flags.append("~NSFW")
 
-        return str
+        if self.private:
+            flags.append("P")
+
+        if self.nsfw & F_SPOILERS:
+            flags.append("SPOILERS")
+
+        if flags:
+            return ",".join(flags)
+        else:
+            return None
 
     def pretty_title(self):
-        print "1----"
         title = self.title
-        if title is None:
-            title = ""
-        else:
+        if title:
             title += ""
-        if self.nsfw > 0 or self.private:
-            title += " ("
+        else:
+            title = self.description
 
-            if self.nsfw & 2:
-                title += "NSFW"
-            elif self.nsfw & 1:
-                title += "~NSFW"
-            if self.nsfw & 4:
-                if self.nsfw != 4:
-                    title += ","
-                title += "SPOILERS"
+        flags = self.pretty_flags()
+        if flags:
+            title = "[" + flags + "] " + title
 
-            if self.private:
-                if self.nsfw > 0:
-                    title += ","
-                title += "P"
-
-            title += ")"
-        print "2---"
         return title
+
+    def pretty_stats(self):
+        alive = ""
+        if not self.alive:
+            alive = " DEAD"
+        return "[%dx, %s, %s%s] " % (self.count, self.user, self.timeAgo(),
+                                     alive)
+
+    def __str__(self):
+        line = self.pretty_title()
+        if line:
+            line = '(' + re.sub(r"\n+", "  ", line) + ')'
+        else:
+            line = ""
+
+        if self.count > 1:
+            line += " %s" % self.pretty_stats()
+
+        return line
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:

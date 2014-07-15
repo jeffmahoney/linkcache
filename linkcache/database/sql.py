@@ -23,6 +23,7 @@ class LinkSql(db.LinkDb):
         q += r"channel TEXT, "
         q += r"private INT DEFAULT 0, "
         q += r"count INT DEFAULT 1, "
+        q += r"usecount INT DEFAULT 1, "
         q += r"alive INT DEFAULT 1 "
         q += r" )"
         self.execute(q, ())
