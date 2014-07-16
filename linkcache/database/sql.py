@@ -70,7 +70,7 @@ class LinkSql(db.LinkDb):
 
         columns = ', '.join(data.keys())
         values = ', '.join([self.field_placeholder] * len(data))
-        query = "INSERT INTO url (%s) VALUES (%s)" % (columns, values)
+        query = "INSERT INTO url (%s, first_seen) VALUES (%s, NOW())" % (columns, values)
 
         self.execute(query, tuple(data.values()))
 
@@ -93,7 +93,7 @@ class LinkSql(db.LinkDb):
         }
 
     def fetch_by_field(self, field, value, channel=""):
-        query  = """SELECT url, user, count, first_seen as 'ts [timestamp]', """
+        query  = """SELECT url, user, count, first_seen, """
         query += """title, CURRENT_TIMESTAMP as 'ts [timestamp]', alive, """
         query += """flags, private, type, description, shorturl, id, channel """
         query += """FROM url WHERE %s = %s""" % (field, self.field_placeholder)
