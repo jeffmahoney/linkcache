@@ -7,6 +7,8 @@ F_SPOILERS = 0x4
 F_NSFW = 0x2
 F_MAYBE_NSFW = 0x1
 
+M_NSFW = F_NSFW | F_MAYBE_NSFW
+
 class LinkCacheResult:
     def __init__(self, result={}):
         self.url = None
@@ -89,6 +91,15 @@ class LinkCacheResult:
             ago += " ago"
 
         return ago
+
+    def merge_flags(self, new_flags):
+        orig = self.flags
+
+        if (orig | new_flags & M_NSFW) == M_NSFW:
+            orig &= ~M_NSFW
+            new_flags &= ~F_MAYBE_NSFW
+
+        return orig | new_flags
 
     def pretty_flags(self):
         flags = []

@@ -128,16 +128,7 @@ class LinkCache:
                 self.database.set_content_type(result.id, type)
                 result.content_type = type
 
-            new_flags = result.flags
-            if result.flags == 0:
-                new_flags = flags
-            elif (result.flags & (F_NSFW|F_MAYBE_NSFW)) == F_MAYBE_NSFW and \
-                 (flags & (F_NSFW)):
-                new_flags |= F_NSFW
-                new_flags &= F_MAYBE_NSFW
-
-            new_flags |= (flags & (F_NSFW|F_MAYBE_NSFW))
-
+            new_flags = result.merge_flags(flags)
             if result.flags != new_flags:
                 result.flags = new_flags
                 self.database.set_flags(result.id, new_flags)
