@@ -222,7 +222,7 @@ class LinkCache:
             result = self.fetch_by_shorturl(url)
             if result is None:
                 raise Exception("*** No match for shorturl %s" % url)
-            if result.channel == channel:
+            if not channel or result.channel == channel:
                 self.database.increment_count(result.id)
                 result.count += 1
                 return result

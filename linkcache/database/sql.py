@@ -95,7 +95,7 @@ class LinkSql(db.LinkDb):
     def fetch_by_field(self, field, value, channel=""):
         query  = """SELECT url, user, count, first_seen as 'ts [timestamp]', """
         query += """title, CURRENT_TIMESTAMP as 'ts [timestamp]', alive, """
-        query += """flags, private, type, description, shorturl, id """
+        query += """flags, private, type, description, shorturl, id, channel """
         query += """FROM url WHERE %s = %s""" % (field, self.field_placeholder)
 
         args = [value]
