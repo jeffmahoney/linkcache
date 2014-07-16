@@ -249,6 +249,8 @@ class LinkCache:
             elif 'Content-Type' in header:
                 content_type = header['Content-Type']
         except urllib2.HTTPError, e:
+            if interpolated:
+                return None
             raise
         except mechanize.BrowserStateError, e:
             title = ""
