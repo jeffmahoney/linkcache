@@ -39,6 +39,6 @@ class LinkDb:
         return self.fetch_by_field("id", id, channel)
 
     def fetch_by_shorturl(self, shorturl, channel=""):
-        return self.fetch_by_field("id", shorturl, channel)
+        return self.fetch_by_field("shorturl", shorturl, channel)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
