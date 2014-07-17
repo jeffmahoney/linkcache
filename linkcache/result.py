@@ -36,6 +36,12 @@ class LinkCacheResult:
         for key, value in result.iteritems():
             setattr(self, key, value)
 
+        if 'timestamp' in result:
+            assert(isinstance(result['timestamp'], datetime))
+
+        if 'result_timestamp' in result:
+            assert(isinstance(result['result_timestamp'], datetime))
+
     def timeAgo(self):
         ago = ""
         delta = self.request_timestamp - self.timestamp
