@@ -241,7 +241,7 @@ class LinkCache:
             self.ping_url(result, flags, update_count)
             return result
 
-        charset = 'utf-8'
+        charset = None
         try:
             r = self.browser.open(url)
             title = self.browser.title()
@@ -265,6 +265,9 @@ class LinkCache:
             title = ""
         except HTMLParser.HTMLParseError, e:
             title = ""
+
+        if charset is None:
+            charset = 'utf-8'
 
         info = self.lookup.get_helper_info(url)
         if info:
