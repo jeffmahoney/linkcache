@@ -147,7 +147,7 @@ class LinkCacheResult:
         return "[%dx, %s, %s%s] " % (self.count, self.user, self.timeAgo(),
                                      alive)
 
-    def __str__(self):
+    def __unicode__(self):
         line = self.pretty_title()
         if line:
             line = '(' + re.sub(r"\n+", "  ", line) + ')'
@@ -158,5 +158,8 @@ class LinkCacheResult:
             line += " %s" % self.pretty_stats()
 
         return line
+
+    def __str__(self):
+        return self.__unicode__().encode('utf-8')
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
