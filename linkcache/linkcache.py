@@ -261,6 +261,10 @@ class LinkCache:
             if interpolated:
                 return None
             raise
+        except urllib2.URLError, e:
+            if interpolated:
+                return None
+            raise
         except mechanize.BrowserStateError, e:
             title = ""
         except HTMLParser.HTMLParseError, e:
