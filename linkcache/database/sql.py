@@ -70,7 +70,7 @@ class LinkSql(db.LinkDb):
 
         columns = ', '.join(data.keys())
         values = ', '.join([self.field_placeholder] * len(data))
-        query = "INSERT INTO url (%s, first_seen) VALUES (%s, NOW())" % (columns, values)
+        query = "INSERT INTO url (%s, first_seen) VALUES (%s, CURRENT_TIMESTAMP)" % (columns, values)
 
         self.execute(query, tuple(data.values()))
 
