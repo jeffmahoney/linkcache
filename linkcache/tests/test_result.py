@@ -69,6 +69,126 @@ class ResultTestCase(unittest.TestCase):
         with self.assertRaises(AssertionError):
             result = linkcache.result.LinkCacheResult(self.rdict)
 
+    def test_maybe_nsfw_flag_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_MAYBE_NSFW
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('~NSFW' in flags.split(','))
+
+    def test_nsfw_flag_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_NSFW
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('NSFW' in flags.split(','))
+
+    def test_spoilers_flag_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_SPOILERS
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('SPOILERS' in flags.split(','))
+
+    def test_private_flag_reporting(self):
+        self.rdict['private'] = True
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('P' in flags.split())
+
+    def test_maybe_nsfw_spoilers_flags_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_MAYBE_NSFW | \
+                              linkcache.result.F_SPOILERS
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('SPOILERS' in flags.split(','))
+        self.assertTrue('~NSFW' in flags.split(','))
+
+    def test_nsfw_spoilers_flags_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_NSFW | \
+                              linkcache.result.F_SPOILERS
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('SPOILERS' in flags.split(','))
+        self.assertTrue('NSFW' in flags.split(','))
+
+    def test_private_spoilers_flags_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_SPOILERS
+        self.rdict['private'] = True
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('SPOILERS' in flags.split(','))
+        self.assertTrue('P' in flags.split(','))
+
+    def test_private_maybe_nsfw_flags_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_MAYBE_NSFW
+        self.rdict['private'] = True
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('P' in flags.split(','))
+        self.assertTrue('~NSFW' in flags.split(','))
+
+    def test_private_nsfw_flags_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_NSFW
+        self.rdict['private'] = True
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('P' in flags.split(','))
+        self.assertTrue('NSFW' in flags.split(','))
+
+    def test_private_maybe_nsfw_spoilers_flags_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_MAYBE_NSFW | \
+                              linkcache.result.F_SPOILERS
+        self.rdict['private'] = True
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('P' in flags.split(','))
+        self.assertTrue('~NSFW' in flags.split(','))
+        self.assertTrue('SPOILERS' in flags.split(','))
+
+    def test_private_nsfw_spoilers_flags_reporting(self):
+        self.rdict['flags'] = linkcache.result.F_NSFW | \
+                              linkcache.result.F_SPOILERS
+        self.rdict['private'] = True
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        flags = result.pretty_flags()
+        self.assertIsInstance(flags, str)
+        self.assertTrue('P' in flags.split(','))
+        self.assertTrue('NSFW' in flags.split(','))
+        self.assertTrue('SPOILERS' in flags.split(','))
+
+    def test_maybe_nsfw_to_nsfw_merging(self):
+        self.rdict['flags'] = linkcache.result.F_MAYBE_NSFW
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        new_flags = result.merge_flags(linkcache.result.F_NSFW)
+        self.assertTrue(new_flags == linkcache.result.F_NSFW)
+
+    def test_nsfw_to_maybe_nsfw_merging(self):
+        self.rdict['flags'] = linkcache.result.F_NSFW
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        new_flags = result.merge_flags(linkcache.result.F_MAYBE_NSFW)
+        self.assertTrue(new_flags == linkcache.result.F_NSFW)
+
+    def test_spoiler_maybe_nsfw_merging(self):
+        self.rdict['flags'] = linkcache.result.F_MAYBE_NSFW
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        new_flags = result.merge_flags(linkcache.result.F_SPOILERS)
+        self.assertTrue(new_flags == linkcache.result.F_MAYBE_NSFW | \
+                                     linkcache.result.F_SPOILERS)
+
+    def test_spoiler_nsfw_merging(self):
+        self.rdict['flags'] = linkcache.result.F_NSFW
+        result = linkcache.result.LinkCacheResult(self.rdict)
+        new_flags = result.merge_flags(linkcache.result.F_SPOILERS)
+        self.assertTrue(new_flags == linkcache.result.F_NSFW | \
+                                     linkcache.result.F_SPOILERS)
 
 if __name__ == '__main__':
     unittest.main()
