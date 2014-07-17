@@ -20,6 +20,8 @@ class LinkMySql(sql.LinkSql):
         except ImportError, e:
             raise UserWarning("you need python-mysql installed")
 
+        self.confirm_table()
+
     def connect(self):
         self.connection = MySQLdb.connect(db=self.db, user=self.user,
                                 passwd=self.passwd, host=self.host,
@@ -39,7 +41,7 @@ class LinkMySql(sql.LinkSql):
             else:
                 break
 
-    def query_one(self, command, args):
+    def query(self, command, args):
         for i in range(0, self.retries + 1):
             try:
                 cursor = self.connection.cursor()
@@ -51,13 +53,28 @@ class LinkMySql(sql.LinkSql):
                     raise
             else:
                 break
+        return cursor
 
+    def query_all(self, query, args):
+        cursor = self.query(query, args)
+        return cursor.fetchall()
+
+    def query_one(self, query, args):
+        cursor = self.query(query, args)
         if cursor.rowcount == 1:
             return cursor.fetchone()
         elif cursor.rowcount == 0:
             return None
 
         raise IndexError("Invalid SQL results: %d results, expected 0 or 1" % cursor.rowcount)
+
+    def describe(self, table):
+        res = self.query_all("DESCRIBE %s" % table, ())
+        table = {}
+        for row in res:
+            table[row[0]] = row[1]
+
+        return table
 
 instantiate = LinkMySql
 

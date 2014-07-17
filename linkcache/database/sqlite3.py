@@ -22,12 +22,14 @@ class LinkSqlite(sql.LinkSql):
         if create:
             self.create_tables()
 
+        sql.confirm_tables()
+
     def execute(self, command, args):
         cursor = self.db.cursor()
         cursor.execute(command, args)
         self.db.commit()
 
-    def query_one(self, command, args):
+    def query(self, command, args):
         for i in range(0, self.retries + 1):
             try:
                 cursor = self.db.cursor()
@@ -43,7 +45,23 @@ class LinkSqlite(sql.LinkSql):
             else:
                 break
 
+        return cursor
+
+    def query_one(self, query, args):
+        cursor = self.query(query, args)
         return cursor.fetchone()
+
+    def query_all(self, query, args):
+        cursor = self.query(query, args)
+        return cursor.fetchall()
+
+    def describe(self, table):
+        res = self.query_all("PRAGMA TABLE_INFO(%s)" % table, ())
+        table = {}
+        for row in res:
+            table[row[1]] = row[2]
+
+        return table
 
 instantiate = LinkSqlite
 

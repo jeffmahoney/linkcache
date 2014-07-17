@@ -30,6 +30,26 @@ class LinkSql(db.LinkDb):
         q += r" )"
         self.execute(q, ())
 
+    def confirm_table(self):
+        results = self.describe('url')
+
+        assert('id' in results)
+        assert('url' in results)
+        assert('shorturl' in results)
+        assert('user' in results)
+        assert('first_seen' in results)
+        assert('title' in results)
+        assert('flags' in results)
+        assert('type' in results)
+        assert('description' in results)
+        assert('channel' in results)
+        assert('private' in results)
+        assert('count' in results)
+        assert('alive' in results)
+
+        assert(results['id'].lower() == "int")
+        assert(results['first_seen'].lower() == 'timestamp')
+
     def execute(self, command, args):
         pass
 
