@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 setup(
     name = "linkcache",
-    version = "0.8",
+    version = "0.9",
     packages = find_packages(),
     package_data = {
         '' : [ "*.dist" "*.txt" ],

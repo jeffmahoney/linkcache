@@ -39,8 +39,8 @@ class LinkCacheResult:
         if 'timestamp' in result:
             assert(isinstance(result['timestamp'], datetime))
 
-        if 'result_timestamp' in result:
-            assert(isinstance(result['result_timestamp'], datetime))
+        if 'request_timestamp' in result:
+            assert(isinstance(result['request_timestamp'], datetime))
 
     def timeAgo(self):
         ago = ""

@@ -59,6 +59,17 @@ class ResultTestCase(unittest.TestCase):
         result = linkcache.result.LinkCacheResult(self.rdict)
         x = str(result)
 
+    def test_timestamp_type_check(self):
+        self.rdict['timestamp'] = None
+        with self.assertRaises(AssertionError):
+            result = linkcache.result.LinkCacheResult(self.rdict)
+
+    def test_request_timestamp_type_check(self):
+        self.rdict['request_timestamp'] = None
+        with self.assertRaises(AssertionError):
+            result = linkcache.result.LinkCacheResult(self.rdict)
+
+
 if __name__ == '__main__':
     unittest.main()
 
