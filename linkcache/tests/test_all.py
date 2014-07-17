@@ -6,9 +6,11 @@ import unittest
 
 testmodules = [
 	"linkcache.tests.test_browser",
+	"linkcache.tests.test_result",
+	"linkcache.tests.test_lookup",
+
 	"linkcache.tests.test_burrowiki",
 	"linkcache.tests.test_imgur",
-	"linkcache.tests.test_lookup",
 	"linkcache.tests.test_readability",
 	"linkcache.tests.test_twitter",
 	"linkcache.tests.test_youtube",

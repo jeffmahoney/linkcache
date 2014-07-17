@@ -13,7 +13,7 @@ M_NSFW = F_NSFW | F_MAYBE_NSFW
 class LinkCacheResult:
     def __init__(self, result={}):
         self.url = None
-        self.nsfw = 0
+        self.flags = 0
         self.private = False
         self.id = None
         self.count = None
@@ -103,23 +103,24 @@ class LinkCacheResult:
     def merge_flags(self, new_flags):
         orig = self.flags
 
-        if (orig | new_flags & M_NSFW) == M_NSFW:
-            orig &= ~M_NSFW
+        if orig & F_MAYBE_NSFW and new_flags & F_NSFW:
+            orig &= ~F_MAYBE_NSFW
+        elif orig & F_NSFW and new_flags & F_MAYBE_NSFW:
             new_flags &= ~F_MAYBE_NSFW
 
         return orig | new_flags
 
     def pretty_flags(self):
         flags = []
-        if self.nsfw & F_NSFW:
+        if self.flags & F_NSFW:
             flags.append("NSFW")
-        elif self.nsfw & F_MAYBE_NSFW:
+        elif self.flags & F_MAYBE_NSFW:
             flags.append("~NSFW")
 
         if self.private:
             flags.append("P")
 
-        if self.nsfw & F_SPOILERS:
+        if self.flags & F_SPOILERS:
             flags.append("SPOILERS")
 
         if flags:

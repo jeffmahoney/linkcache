@@ -231,7 +231,10 @@ class LinkCache:
 
         try:
             result = self.fetch_by_url(url, channel)
+        except AssertionError, e:
+            raise
         except Exception, e:
+            print "EXCEPTION: %s" % str(e)
             result = None
 
         if result is not None:
