@@ -32,7 +32,7 @@ class TwitterTestCase(unittest.TestCase):
         expected_title = "@nanglish: Ask your doctor if birth control is right for you. Then ask your boss. Then ask some judges. Then ask a guy pooping his pants outside Arby's"
 
         ret = self.helper.fetch(self.browser, link)
-        self.assertTrue(type(ret) == dict)
+        self.assertIsInstance(ret, dict)
         self.assertTrue('description' in ret)
         self.assertTrue(ret['description'] == expected_title)
 

@@ -46,7 +46,7 @@ class YoutubeTestCase(unittest.TestCase):
         ret = self.helper.fetch(self.browser, link)
 
         self.assertTrue(ret is not None)
-        self.assertTrue(type(ret) == dict)
+        self.assertIsInstance(ret, dict)
         self.assertTrue('title' in ret)
         self.assertTrue(ret['title'] == title + " [timecode]")
 

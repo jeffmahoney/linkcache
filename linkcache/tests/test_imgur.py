@@ -32,7 +32,7 @@ class ImgurTestCase(unittest.TestCase):
         expected_title = "A monument to lab rats used for DNA research. Novosibirsk, Russia - Imgur"
 
         ret = self.helper.fetch(self.browser, link)
-        self.assertTrue(type(ret) == dict)
+        self.assertIsInstance(ret, dict)
         self.assertTrue('title' in ret)
         self.assertTrue(ret['title'] == expected_title)
 

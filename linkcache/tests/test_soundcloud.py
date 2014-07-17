@@ -23,7 +23,7 @@ class SoundCloudTestCase(unittest.TestCase):
         expected_title = "SoundCloud requires JS for all pages, so you don't get a title for this non-track link"
 
         ret = self.helper.fetch(self.browser, link)
-        self.assertTrue(type(ret) == dict)
+        self.assertIsInstance(ret, dict)
         self.assertTrue('title' in ret)
         self.assertTrue(ret['title'] == expected_title)
 
@@ -32,7 +32,7 @@ class SoundCloudTestCase(unittest.TestCase):
         expected_title = "Flickermood by Forss on Soundcloud"
 
         ret = self.helper.fetch(self.browser, link)
-        self.assertTrue(type(ret) == dict)
+        self.assertIsInstance(ret, dict)
         self.assertTrue('title' in ret)
         self.assertTrue(ret['title'] == expected_title)
 
@@ -41,7 +41,7 @@ class SoundCloudTestCase(unittest.TestCase):
         expected_title = "Comcastic service disconnection by ryan.block on Soundcloud"
 
         ret = self.helper.fetch(self.browser, link)
-        self.assertTrue(type(ret) == dict)
+        self.assertIsInstance(ret, dict)
         self.assertTrue('title' in ret)
         self.assertTrue(ret['title'] == expected_title)
 
