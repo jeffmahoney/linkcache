@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-,
 class LinkDb:
     def __init__(self, config):
         assert type(config) is dict

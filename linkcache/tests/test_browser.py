@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-,
 import unittest
 import urllib2
 import mechanize

@@ -1,4 +1,5 @@
 #!/usr/bin/python env
+# -*- coding: utf-8 -*-,
 
 class UrlHelper(object):
     config_section = None

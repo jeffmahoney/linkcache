@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-,
 
 class GenericShortener:
     def __init__(self, config):
