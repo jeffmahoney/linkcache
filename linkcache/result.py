@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-,
 
 from datetime import datetime
 import re
@@ -34,6 +35,12 @@ class LinkCacheResult:
 
         for key, value in result.iteritems():
             setattr(self, key, value)
+
+        if 'timestamp' in result:
+            assert(isinstance(result['timestamp'], datetime))
+
+        if 'request_timestamp' in result:
+            assert(isinstance(result['request_timestamp'], datetime))
 
     def timeAgo(self):
         ago = ""
@@ -140,7 +147,7 @@ class LinkCacheResult:
         return "[%dx, %s, %s%s] " % (self.count, self.user, self.timeAgo(),
                                      alive)
 
-    def __str__(self):
+    def __unicode__(self):
         line = self.pretty_title()
         if line:
             line = '(' + re.sub(r"\n+", "  ", line) + ')'
@@ -151,5 +158,8 @@ class LinkCacheResult:
             line += " %s" % self.pretty_stats()
 
         return line
+
+    def __str__(self):
+        return self.__unicode__().encode('utf-8')
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:

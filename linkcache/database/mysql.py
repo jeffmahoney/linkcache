@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-,
 import sql
 import MySQLdb
 
@@ -22,7 +23,7 @@ class LinkMySql(sql.LinkSql):
     def connect(self):
         self.connection = MySQLdb.connect(db=self.db, user=self.user,
                                 passwd=self.passwd, host=self.host,
-                                charset='utf8')
+                                charset='utf8', use_unicode=True)
 
     def execute(self, command, args):
         for i in range(0, self.retries + 1):

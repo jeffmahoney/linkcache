@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-,
 
 import sql
 import os
@@ -11,7 +12,7 @@ class LinkSqlite(sql.LinkSql):
         sql.LinkSql.__init__(self, config)
         self.filename = config['filename']
         self.db = None
-        self.retries = 2
+        self.retries = 1
         self.connect()
 
     def connect(self):
@@ -27,15 +28,20 @@ class LinkSqlite(sql.LinkSql):
         self.db.commit()
 
     def query_one(self, command, args):
-        for i in range(0, self.retries):
+        for i in range(0, self.retries + 1):
             try:
                 cursor = self.db.cursor()
                 cursor.execute(command, args)
             except sqlite3.OperationalError, e:
-                print e
-                self.db.close()
-                self.db = None
-                self.connect()
+                if i < self.retries:
+                    print e
+                    self.db.close()
+                    self.db = None
+                    self.connect()
+                else:
+                    raise
+            else:
+                break
 
         return cursor.fetchone()
 

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-,
 
 import db
 import time
+import datetime
 
 class LinkSql(db.LinkDb):
     def __init__(self, config):
@@ -67,15 +69,20 @@ class LinkSql(db.LinkDb):
 
         if channel:
             data['channel'] = channel
+        else:
+            data['channel'] = ''
 
         columns = ', '.join(data.keys())
         values = ', '.join([self.field_placeholder] * len(data))
-        query = "INSERT INTO url (%s, first_seen) VALUES (%s, NOW())" % (columns, values)
+        query = "INSERT INTO url (%s, first_seen) VALUES (%s, CURRENT_TIMESTAMP)" % (columns, values)
 
         self.execute(query, tuple(data.values()))
 
     @staticmethod
     def row_to_result(row):
+        assert(isinstance(row[3], datetime.datetime))
+        assert(isinstance(row[5], datetime.datetime))
+
         return {
             'url' : row[0],
             'user' : row[1],
@@ -93,7 +100,7 @@ class LinkSql(db.LinkDb):
         }
 
     def fetch_by_field(self, field, value, channel=""):
-        query  = """SELECT url, user, count, first_seen, """
+        query  = """SELECT url, user, count, first_seen as 'ts [timestamp]', """
         query += """title, CURRENT_TIMESTAMP as 'ts [timestamp]', alive, """
         query += """flags, private, type, description, shorturl, id, channel """
         query += """FROM url WHERE %s = %s""" % (field, self.field_placeholder)

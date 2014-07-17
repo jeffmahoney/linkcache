@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-,
 
 import HTMLParser
 import mechanize
@@ -237,6 +238,7 @@ class LinkCache:
             self.ping_url(result, flags, update_count)
             return result
 
+        charset = 'utf-8'
         try:
             r = self.browser.open(url)
             title = self.browser.title()
@@ -244,6 +246,10 @@ class LinkCache:
                 title = " ".join(title.split())
 
             header = r.info()
+            try:
+                charset = header.getparam('charset')
+            except:
+                pass
             if 'Content-type' in header:
                 content_type = header['Content-type']
             elif 'Content-Type' in header:
@@ -285,11 +291,15 @@ class LinkCache:
             description = self.lookup.get_html_description(r.read())
 
         if description:
+            if not isinstance(description, unicode):
+                description = unicode(description, charset)
             description = description.strip()
 
         if title is None:
-            title = ""
+            title = u""
         else:
+            if not isinstance(title, unicode):
+                title = unicode(title, charset)
             title = title.strip()
 
         shorturl = self.shortener.pre_shorten(url)
