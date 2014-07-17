@@ -11,6 +11,7 @@ readability
 shorturl
 twitterhelper
 youtube
+soundcloudhelper
 
 class HelperTests(common.LinkCacheTestCase):
     def test_burrowiki(self):
@@ -29,6 +30,9 @@ class HelperTests(common.LinkCacheTestCase):
         pass
 
     def test_youtube(self):
+        pass
+
+    def test_soundcloud(self):
         pass
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:

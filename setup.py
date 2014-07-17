@@ -12,6 +12,7 @@ setup(
     install_requires = [
         "python_twitter",
         "mechanize",
+        "soundcloud",
     ],
 
     author = "Jeff Mahoney",
