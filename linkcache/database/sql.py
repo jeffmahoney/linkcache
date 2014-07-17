@@ -69,6 +69,8 @@ class LinkSql(db.LinkDb):
 
         if channel:
             data['channel'] = channel
+        else:
+            data['channel'] = ''
 
         columns = ', '.join(data.keys())
         values = ', '.join([self.field_placeholder] * len(data))
