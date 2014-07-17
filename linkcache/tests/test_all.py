@@ -12,6 +12,7 @@ testmodules = [
 	"linkcache.tests.test_readability",
 	"linkcache.tests.test_twitter",
 	"linkcache.tests.test_youtube",
+	"linkcache.tests.test_soundcloud",
     ]
 
 suite = unittest.TestSuite()

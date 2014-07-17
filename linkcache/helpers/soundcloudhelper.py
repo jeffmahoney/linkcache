@@ -12,7 +12,7 @@ class SoundCloudHelper(UrlHelper):
     def __init__(self, config):
         UrlHelper.__init__(self, config)
 
-        self.provides = [ 'title' ]
+        self.provides = [ 'title', 'description' ]
         self.clear_title = True
         self.url_regex = re.compile("soundcloud.com.*")
 
@@ -23,10 +23,13 @@ class SoundCloudHelper(UrlHelper):
             track = self.client.get('/resolve', url=url)
 
             trackString = track.title + " by " + track.user['username'] + " on Soundcloud"
+            trackDesc = track.description
 
-            return {'title': trackString}
+            return { 'title': trackString,
+                     'description': trackDesc }
         except requests.exceptions.HTTPError:
-            return {'title': "SoundCloud requires JS for all pages, so you don't get a title for this non-track link"}
+            return { 'title': "SoundCloud - Hear the world’s sounds",
+                     'description': "SoundCloud requires JS for all pages, so you don't get any useful data for this non-track link"}
 
 instantiate = SoundCloudHelper
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
