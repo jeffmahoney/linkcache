@@ -247,6 +247,7 @@ class LinkCache:
             title = self.browser.title()
             if title is not None:
                 title = " ".join(title.split())
+                title = unicode(title, self.browser.encoding())
 
             header = r.info()
             try:
