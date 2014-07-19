@@ -47,7 +47,7 @@ class LinkSql(db.LinkDb):
         assert('count' in results)
         assert('alive' in results)
 
-        assert(results['id'].lower() == "integer")
+        assert('int' in results['id'].lower())
         assert(results['first_seen'].lower() == 'timestamp')
 
     def execute(self, command, args):
