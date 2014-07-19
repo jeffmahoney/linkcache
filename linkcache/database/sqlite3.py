@@ -22,7 +22,7 @@ class LinkSqlite(sql.LinkSql):
         if create:
             self.create_tables()
 
-        sql.confirm_tables()
+        self.confirm_table()
 
     def execute(self, command, args):
         cursor = self.db.cursor()
