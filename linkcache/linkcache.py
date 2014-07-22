@@ -298,7 +298,7 @@ class LinkCache:
                 if helper.clear_title:
                     title = None
 
-        if 'html' in content_type and not description:
+        if content_type and 'html' in content_type and not description:
             description = self.lookup.get_html_description(r.read())
 
         if description:
