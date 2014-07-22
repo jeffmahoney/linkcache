@@ -72,6 +72,12 @@ class LinkCacheResult:
                 ago += ", "
             ago += str(months) + "m"
 
+        if weeks > 0:
+            minutes = seconds = 0
+            if ago != "":
+                ago += ", "
+            ago += str(weeks) + "w"
+
         if days > 0:
             minutes = seconds = 0
             if ago != "":
