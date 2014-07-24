@@ -31,7 +31,6 @@ ipAddressRegex = re.compile(r"^((((([0-9]{1,3})\.){3})([0-9]{1,3}))((\/[^\s]+)|)
 urlRegex = re.compile(r"(^|\s+)(([\|\$\!\~\^]+)|)(((([\w\-]+\.)+)([\w\-]+))(((/[\w\-\.%\(\)~]*)+)+|\s+|[\!\?\.,;]+|$)|https?://[^\]>\s]*)")
 selfRefRegex = re.compile(r"http://(www.|)ice-nine.org/(l|link.php)/([A-Za-z0-9]+)")
 httpUrlRegex = re.compile(r"(https?://[^\]>\s]+)", re.I)
-googleRegex = re.compile(r"^(\w*\s*\|\s*|)@google (.*)", re.I)
 
 class LinkCache:
     def __init__(self, config):
@@ -85,6 +84,13 @@ class LinkCache:
         self.shortener = m.instantiate(shortener_config)
         self.lookup = lookup.Lookup(config)
 
+        self.line_rewriters = []
+        if 'rewriters' in config['general']:
+            for name in config['general']['rewriters'].split():
+                regex = config[name]['regex']
+                rewriter = config[name]['rewriter']
+                self.line_rewriters.append((re.compile(regex),
+                                           compile(rewriter, '', 'exec')))
     @staticmethod
     def check_config(config):
         if 'general' not in config:
@@ -161,6 +167,22 @@ class LinkCache:
         except UnicodeDecodeError, e:
             pass
 
+    def call_rewriters(self, line):
+        def exec_rewriter(rewriter, match):
+            ns = { 'match' : match,
+                   'line' : None }
+            exec rewriter in ns
+            return ns['line']
+
+        for rewriter in self.line_rewriters:
+            m = rewriter[0].match(line)
+            if m:
+                res = exec_rewriter(rewriter[1], m)
+                if res:
+                    return res;
+
+        return None
+
     def parse_line(self, line, user, update_count=True, channel=""):
         """
         Typical exceptions: urllib2.HTTPError
@@ -170,12 +192,9 @@ class LinkCache:
         description = None
         content_type = None
 
-        if googleRegex:
-            match = googleRegex.match(line)
-            if match:
-                terms = urlencode({'btnI' : "I'm Feeling Lucky",
-                                   'q': match.group(2)})
-                line = "http://www.google.com/search?hl=en&ie=ISO-8859-1&%s" % terms
+        mapped = self.call_rewriters(line)
+        if mapped:
+            line = mapped
 
         match = urlRegex.search(line)
         if match is None:

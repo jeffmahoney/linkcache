@@ -1,8 +1,8 @@
-[db]
-type: sqlite3 or mysql
-
-[shortener]
-type: iorek
+[general]
+database: sqlite3  # or mysql
+shortener: iorek
+# handlers:  ...
+rewriters: google
 
 [sqlite3]
 filename: /path/to/sqlite.db
@@ -27,3 +27,9 @@ password: password
 [browser]
 cookiejar: /path/to/cookies.txt
 passwords: /path/to/passwords.csv
+
+[google]
+regex: ^(\w*\s*\|\s*|)@google (.*)
+rewriter: from urllib import urlencode
+  terms = urlencode({'btnI' : "I'm Feeling Lucky", 'q' : match.group(2)})
+  line = "http://www.google.com/search?hl=en&ie=ISO-8859-1&%s" % terms
