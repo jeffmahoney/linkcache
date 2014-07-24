@@ -360,9 +360,6 @@ class LinkCache:
             result.shorturl = shorturl
             self.database.update_shorturl(result.id, shorturl)
 
-        if result.shorturl is None:
-            raise CodeError("URL Shortener failed!")
-
         return result
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:
