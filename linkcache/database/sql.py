@@ -70,9 +70,12 @@ class LinkSql(db.LinkDb):
     def new_entry(self, url, shorturl, user, title, flags=0, content_type=None,
                   description=None, channel="", private=0):
 
+        if shorturl is None:
+            shorturl = ""
+
         data = {
             'url' : url,
-            'shorturl' : "",
+            'shorturl' : shorturl,
             'user' : user,
             'title' : title,
             'flags' : flags,
