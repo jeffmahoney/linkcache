@@ -46,6 +46,14 @@ class LinkCache:
 
         self.config = config
 
+        self.allow_interpolation = True
+        if 'allow_interpolation' in config['general']:
+            self.allow_interpolation = config['general']['allow_interpolation']
+
+        self.minimum_length = 0
+        if 'minimum_length' in config['general']:
+            self.minimum_length = config['general']['minimum_length']
+
         try:
             cookies = config['browser']['cookiejar']
         except KeyError:
@@ -220,7 +228,7 @@ class LinkCache:
         result['private'] = private
 
         # URL without a protocol:// prefix
-        if not httpUrlRegex.search(url):
+        if not httpUrlRegex.search(url) and self.allow_interpolation:
             interpolated = True
 
             if re.search(r"^(([0-9]+)\.)+(|[0-9]+)$", url):
@@ -238,6 +246,9 @@ class LinkCache:
                         return None
 
             url = "http://" + url
+
+        if len(url) < self.minimum_length:
+            return None
 
         # URL referencing the short link
         shorturl = self.shortener.self_reference(url)
