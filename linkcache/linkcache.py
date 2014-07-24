@@ -24,6 +24,9 @@ class LinkCacheHTTPError(urllib2.HTTPError):
 class ConfigError(Exception):
     pass
 
+class CodeError(Exception):
+    pass
+
 ipAddressRegex = re.compile(r"^((((([0-9]{1,3})\.){3})([0-9]{1,3}))((\/[^\s]+)|))$")
 urlRegex = re.compile(r"(^|\s+)(([\|\$\!\~\^]+)|)(((([\w\-]+\.)+)([\w\-]+))(((/[\w\-\.%\(\)~]*)+)+|\s+|[\!\?\.,;]+|$)|https?://[^\]>\s]*)")
 selfRefRegex = re.compile(r"http://(www.|)ice-nine.org/(l|link.php)/([A-Za-z0-9]+)")
@@ -327,8 +330,8 @@ class LinkCache:
             result.shorturl = shorturl
             self.database.update_shorturl(result.id, shorturl)
 
-        if shorturl is None:
-            raise("URL Shortener failed!")
+        if result.shorturl is None:
+            raise CodeError("URL Shortener failed!")
 
         return result
 
