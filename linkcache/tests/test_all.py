@@ -8,6 +8,7 @@ testmodules = [
 	"linkcache.tests.test_browser",
 	"linkcache.tests.test_result",
 	"linkcache.tests.test_lookup",
+	"linkcache.tests.test_rewriter",
 
 	"linkcache.tests.test_burrowiki",
 	"linkcache.tests.test_imgur",
