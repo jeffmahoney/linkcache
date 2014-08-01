@@ -66,6 +66,12 @@ class LinkCache:
         self.browser = browser.SingletonBrowser(cookies, passwords)
         db = config['general']['database']
 
+        if db == 'sqlite3':
+            db = 'sqlite'
+
+        if 'sqlite3' in config:
+            config['sqlite'] = config['sqlite3']
+
         try:
             m = importlib.import_module("linkcache.database.%s" % db)
         except ImportError, e:

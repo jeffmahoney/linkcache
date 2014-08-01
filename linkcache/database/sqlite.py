@@ -3,7 +3,8 @@
 
 import sql
 import os
-from pysqlite2 import dbapi2 as sqlite3
+#from pysqlite2 import dbapi2 as sqlite3
+import sqlite3
 
 class LinkSqlite(sql.LinkSql):
     auto_increment = "AUTOINCREMENT"

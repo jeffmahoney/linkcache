@@ -1,12 +1,12 @@
 [general]
-database: sqlite3  # or mysql
+database: sqlite  # or mysql
 shortener: iorek
 # handlers:  ...
 rewriters: google
 #minimum_length: 0
 #allow_interpolation: True
 
-[sqlite3]
+[sqlite]
 filename: /path/to/sqlite.db
 
 [mysql]
