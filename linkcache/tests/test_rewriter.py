@@ -3,32 +3,15 @@
 
 import setup
 import unittest
+import ConfigParser
 
 import linkcache.linkcache
 
-config = {
-    'general' : {
-        'database' : 'sqlite3',
-        'shortener' : 'none',
-        'rewriters' : 'google',
-        'helpers' : '',
-    },
-    'sqlite3' : {
-        'filename' : 'test.sqlite3',
-    },
-    'google' : {
-        'regex' : "^(\w*\s*\|\s*|)@google (.*)",
-        'rewriter' :
-"""
-from urllib import urlencode
-terms = urlencode({'btnI' : "I'm Feeling Lucky", 'q' : match.group(2)})
-line = "http://www.google.com/search?hl=en&ie=ISO-8859-1&%s" % terms
-""",
-    }
-}
-
 class LookupTestCase(unittest.TestCase):
     def setUp(self):
+        config = ConfigParser.ConfigParser()
+        f = open('test_rewriter.ini')
+        config.readfp(f)
 	self.cache = linkcache.linkcache.LinkCache(config)
 
     def test_google(self):
