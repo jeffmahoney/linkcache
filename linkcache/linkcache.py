@@ -69,7 +69,8 @@ class LinkCache:
         try:
             m = importlib.import_module("linkcache.database.%s" % db)
         except ImportError, e:
-            raise ConfigError("No module for %s database found." % db)
+            raise ConfigError("No module for %s database found (%s)" %
+                              (db, str(e)))
 
         try:
             db_config = config[db]
@@ -82,7 +83,8 @@ class LinkCache:
         try:
             m = importlib.import_module("linkcache.shorteners.%s" % shortener)
         except ImportError, e:
-            raise ConfigError("No module for %s shortener found." % shortener)
+            raise ConfigError("No module for %s shortener found (%s)" %
+                              (shortener, str(e)))
 
         try:
             shortener_config = config[shortener]
