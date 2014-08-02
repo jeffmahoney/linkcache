@@ -30,6 +30,9 @@ password: password
 cookiejar: /path/to/cookies.txt
 passwords: /path/to/passwords.csv
 
+[wolframalpha]
+appid: appid
+
 [google]
 regex: ^(\w*\s*\|\s*|)@google (.*)
 rewriter: from urllib import urlencode
