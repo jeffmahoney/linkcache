@@ -13,6 +13,7 @@ setup(
         "python_twitter",
         "mechanize",
         "soundcloud",
+        "wolframalpha",
     ],
 
     author = "Jeff Mahoney",
