@@ -283,6 +283,7 @@ class LinkCache:
             return result
 
         charset = None
+        deferred_exception = None
         try:
             r = self.browser.open(url)
             title = self.browser.title()
@@ -302,11 +303,15 @@ class LinkCache:
         except urllib2.HTTPError, e:
             if interpolated:
                 return None
-            raise
+            if mapped is None:
+                raise
+            deferred_exception = e
         except urllib2.URLError, e:
             if interpolated:
                 return None
-            raise
+            if mapped is None:
+                raise
+            deferred_exception = e
         except mechanize.BrowserStateError, e:
             title = ""
         except HTMLParser.HTMLParseError, e:
@@ -338,6 +343,8 @@ class LinkCache:
                 description = info['description']
                 if helper.clear_title:
                     title = None
+        elif deferred_exception:
+            raise deferred_exception
 
         if content_type and 'html' in content_type and not description:
             description = self.lookup.get_html_description(r.read())
