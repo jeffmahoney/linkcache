@@ -7,9 +7,13 @@ import json
 import re
 from urllib import unquote_plus
 
-class WolframAlphaHelperError(Exception):
+from xml.etree import ElementTree as etree
+
+class NoResultError(Exception):
     pass
 
+class AmbiguousResultError(Exception):
+    pass
 
 class WolframAlphaHelper(UrlHelper):
     config_section = 'wolframalpha'
@@ -37,11 +41,34 @@ class WolframAlphaHelper(UrlHelper):
             elif pod.title == "Input":
                 interpretation = pod.text
 
+        try:
+            if not interpretation:
+                interpretation = res.pods[0].text
+
+            if not result:
+                result = res.pods[1].text
+        except IndexError:
+            pass
+
         if interpretation and result:
             result = "%s: %s" % (interpretation, result)
+        else:
+            try:
+                dyms = res.tree.findall('didyoumeans')[0].findall('didyoumean')
+                options = []
+                for dym in dyms:
+                    options.append(dym.text)
+                if len(options) > 1:
+                    prefix = "one of "
+                else:
+                    prefix = ""
+                raise AmbiguousResultError("Did you mean %s[%s]?" % \
+                                           (prefix, ", ".join(options)))
+            except IndexError:
+                pass
 
         if not result:
-            raise WolframAlphaHelperError("No results found.")
+            raise NoResultError("No results found.")
 
         return {
             'description' : result,
