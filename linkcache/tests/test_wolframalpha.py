@@ -3,7 +3,7 @@
 import unittest
 import ConfigParser
 import json
-from urllib import urlencode
+from urllib import quote_plus
 
 from linkcache import browser
 from linkcache.helpers import wolframalphahelper
@@ -17,25 +17,25 @@ class WolframAlphaTests(unittest.TestCase):
         self.browser = browser.SingletonBrowser()
         self.helper = wolframalphahelper.instantiate(conf)
 
+    @staticmethod
+    def url(expression):
+        return "http://www.wolframalpha.com/input/?i=%s" % \
+                quote_plus(expression)
+
     def test_wolframalpha_simple_expression(self):
         expression = "5 + 5"
-        ret = json.loads(self.helper.fetch(self.browser, expression))
-        self.assertTrue(ret['expression'] == "5 + 5" and ret['result'] == "10")
+        ret = self.helper.fetch(self.browser, self.url(expression))
+        self.assertTrue(ret['description'] == "5+5: 10")
 
-    def test_wolframalpha_complex_expression(self):
-        expression = "temperature in Washington, DC on October 3, 2012"
-        ret = json.loads(self.helper.fetch(self.browser, expression))
-        self.assertTrue(ret['result'] == u"(70 to 81) \xb0F (average: 75 \xb0F)\n(Wednesday, October 3, 2012)")
+    def test_interpreted_expression(self):
+        expression = "distance to the sun"
+        ret = self.helper.fetch(self.browser, self.url(expression))
+        self.assertTrue(ret['description'] == 'Sun | distance from Earth: 1.014 au  (astronomical units)')
 
     def test_wolframalpha_junk(self):
         expression = "slksjdflasknenwnqwn;qlkne;qlkjeocina;sdnfasdf"
-        ret = json.loads(self.helper.fetch(self.browser, expression))
-        self.assertTrue(ret['result'] == "")
-
-    def test_matching(self):
-        expression = "please @calc 5 + 5"
-        self.helper.match(expression)
-
+        with self.assertRaises(wolframalphahelper.WolframAlphaHelperError):
+            ret = self.helper.fetch(self.browser, self.url(expression))
 
 if __name__ == '__main__':
     unittest.main()

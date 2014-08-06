@@ -38,3 +38,9 @@ regex: ^(\w*\s*\|\s*|)@google (.*)
 rewriter: from urllib import urlencode
   terms = urlencode({'btnI' : "I'm Feeling Lucky", 'q' : match.group(2)})
   line = "http://www.google.com/search?hl=en&ie=ISO-8859-1&%s" % terms
+
+[calc] # requires wolframalphahelper
+regex: ^@calc\s+(.*)
+rewriter: from urllib import quote_plus
+  terms = quote_plus(match.group(1))
+  line = "http://calc.internal/%s" % terms
