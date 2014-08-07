@@ -17,7 +17,8 @@ class LinkSql(db.LinkDb):
         q += r"url TEXT NOT NULL, "
         q += r"shorturl TEXT, "
         q += r"user TEXT NOT NULL, "
-        q += r"first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+        q += r"first_seen TIMESTAMP, "
+        q += r"last_seen TIMESTAMP, "
         q += r"title TEXT, "
         q += r"flags INT, "
         q += r"type TEXT, "
@@ -38,6 +39,7 @@ class LinkSql(db.LinkDb):
         assert('shorturl' in results)
         assert('user' in results)
         assert('first_seen' in results)
+        assert('last_seen' in results)
         assert('title' in results)
         assert('flags' in results)
         assert('type' in results)
@@ -49,6 +51,7 @@ class LinkSql(db.LinkDb):
 
         assert('int' in results['id'].lower())
         assert(results['first_seen'].lower() == 'timestamp')
+        assert(results['last_seen'].lower() == 'timestamp')
 
     def execute(self, command, args):
         pass
@@ -63,7 +66,8 @@ class LinkSql(db.LinkDb):
         self.execute(query, args)
 
     def increment_count(self, id):
-        query = """UPDATE url SET count = count + 1 WHERE id = %s""" % \
+        query  = """UPDATE url SET count = count + 1, """
+        query += """last_seen = CURRENT_TIMESTAMP WHERE id = %s""" % \
                 self.field_placeholder
         self.execute(query, (id, ))
 
@@ -97,7 +101,8 @@ class LinkSql(db.LinkDb):
 
         columns = ', '.join(data.keys())
         values = ', '.join([self.field_placeholder] * len(data))
-        query = "INSERT INTO url (%s, first_seen) VALUES (%s, CURRENT_TIMESTAMP)" % (columns, values)
+        query  = "INSERT INTO url (%s, first_seen, last_seen) " % columns
+        query += "VALUES (%s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)" % values
 
         self.execute(query, tuple(data.values()))
 
