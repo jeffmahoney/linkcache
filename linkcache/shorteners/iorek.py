@@ -4,7 +4,7 @@
 import re
 import common
 
-selfRefRegex = re.compile(r"http://(www.|)ice-nine.org/(l|link.php)/([A-Za-z0-9]+)")
+selfRefRegex = re.compile(r"https?://(www.|)ice-nine.org/(l|link.php)/([A-Za-z0-9]+)")
 class IorekShortener(common.GenericShortener):
     def url_to_id(self, id):
         map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
@@ -39,7 +39,7 @@ class IorekShortener(common.GenericShortener):
         return selfRefRegex.search(url) is not None
 
     def post_shorten(self, url, id):
-        return "http://ice-nine.org/l/%s" % self.map_id(id)
+        return "https://ice-nine.org/l/%s" % self.map_id(id)
 
 instantiate = IorekShortener
 
