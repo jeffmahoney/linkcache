@@ -138,7 +138,7 @@ class LinkCacheResult:
         title = self.title
         if title:
             title += ""
-        else:
+        elif self.description:
             title = self.description.replace("\r\n", "\n")
 
         flags = self.pretty_flags()

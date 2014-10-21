@@ -52,7 +52,8 @@ class WolframAlphaHelper(UrlHelper):
 
         if interpretation and result:
             result = "%s: %s" % (interpretation, result)
-        else:
+
+        if not result:
             try:
                 dyms = res.tree.findall('didyoumeans')[0].findall('didyoumean')
                 options = []
@@ -67,7 +68,6 @@ class WolframAlphaHelper(UrlHelper):
             except IndexError:
                 pass
 
-        if not result:
             raise NoResultError("No results found.")
 
         return {
