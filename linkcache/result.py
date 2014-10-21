@@ -28,6 +28,7 @@ class LinkCacheResult:
         self.shorturl = None
         self.id = None
         self.channel = None
+        self.last_seen = None
 
         if type(result) is str:
             self.user = result

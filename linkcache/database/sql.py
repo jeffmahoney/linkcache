@@ -18,6 +18,7 @@ class LinkSql(db.LinkDb):
         q += r"shorturl TEXT, "
         q += r"user TEXT NOT NULL, "
         q += r"first_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+        q += r"last_seen TIMESTAMP, "
         q += r"title TEXT, "
         q += r"flags INT, "
         q += r"type TEXT, "
@@ -63,7 +64,7 @@ class LinkSql(db.LinkDb):
         self.execute(query, args)
 
     def increment_count(self, id):
-        query = """UPDATE url SET count = count + 1 WHERE id = %s""" % \
+        query = """UPDATE url SET count = count + 1, last_seen = CURRENT_TIMESTAMP WHERE id = %s""" % \
                 self.field_placeholder
         self.execute(query, (id, ))
 
@@ -97,7 +98,7 @@ class LinkSql(db.LinkDb):
 
         columns = ', '.join(data.keys())
         values = ', '.join([self.field_placeholder] * len(data))
-        query = "INSERT INTO url (%s, first_seen) VALUES (%s, CURRENT_TIMESTAMP)" % (columns, values)
+        query = "INSERT INTO url (%s, first_seen, last_seen) VALUES (%s, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)" % (columns, values)
 
         self.execute(query, tuple(data.values()))
 
@@ -120,12 +121,14 @@ class LinkSql(db.LinkDb):
             'description' : row[10],
             'shorturl' : row[11],
             'id' : row[12],
+            'last_seen' : row[13],
         }
 
     def fetch_by_field(self, field, value, channel=""):
         query  = """SELECT url, user, count, first_seen as 'ts [timestamp]', """
         query += """title, CURRENT_TIMESTAMP as 'ts [timestamp]', alive, """
-        query += """flags, private, type, description, shorturl, id, channel """
+        query += """flags, private, type, description, shorturl, id, """
+        query += """channel, last_seen"""
         query += """FROM url WHERE %s = %s""" % (field, self.field_placeholder)
 
         args = [value]
