@@ -59,7 +59,7 @@ class LinkCacheResult:
         months = 0
         if weeks > 10:
             months = weeks / 4
-            days += weeks * 7
+            days += (weeks % 4) * 7
             weeks = 0
 
         if years > 0:
