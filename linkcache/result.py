@@ -17,7 +17,6 @@ class LinkCacheResult:
         self.private = False
         self.id = None
         self.count = None
-        self.timestamp = None
         self.title = None
         self.first_seen = None
         self.request_timestamp = None
@@ -37,15 +36,15 @@ class LinkCacheResult:
         for key, value in result.iteritems():
             setattr(self, key, value)
 
-        if 'timestamp' in result:
-            assert(isinstance(result['timestamp'], datetime))
+        if 'first_seen' in result:
+            assert(isinstance(result['first_seen'], datetime))
 
         if 'request_timestamp' in result:
             assert(isinstance(result['request_timestamp'], datetime))
 
     def timeAgo(self):
         ago = ""
-        delta = self.request_timestamp - self.timestamp
+        delta = self.request_timestamp - self.first_seen
 
         years = int(delta.days / 365.24)
         days = int(delta.days % 365.24)

@@ -115,7 +115,7 @@ class LinkSql(db.LinkDb):
             'url' : row[0],
             'user' : row[1],
             'count' : int(row[2]),
-            'timestamp' : row[3],
+            'first_seen' : row[3],
             'title' : row[4],
             'request_timestamp' : row[5],
             'alive' : row[6],
@@ -125,14 +125,15 @@ class LinkSql(db.LinkDb):
             'description' : row[10],
             'shorturl' : row[11],
             'id' : row[12],
-            'last_seen' : row[13],
+            'channel' : row[13],
+            'last_seen' : row[14],
         }
 
     def fetch_by_field(self, field, value, channel=""):
         query  = """SELECT url, user, count, first_seen as 'ts [timestamp]', """
         query += """title, CURRENT_TIMESTAMP as 'ts [timestamp]', alive, """
         query += """flags, private, type, description, shorturl, id, """
-        query += """channel, last_seen """
+        query += """channel, last_seen as 'ts [timestamp]' """
         query += """FROM url WHERE %s = %s""" % (field, self.field_placeholder)
 
         args = [value]

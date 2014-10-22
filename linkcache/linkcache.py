@@ -8,6 +8,7 @@ import re
 import os
 import importlib
 import ConfigParser
+from datetime import datetime
 
 import database
 from result import LinkCacheResult
@@ -131,6 +132,7 @@ class LinkCache:
     def ping_url(self, result, flags, update_count):
         if update_count:
             result.count += 1
+            result.last_seen = datetime.utcnow()
             self.database.increment_count(result.id)
 
         try:
@@ -265,8 +267,9 @@ class LinkCache:
             if result is None:
                 raise Exception("*** No match for shorturl %s" % url)
             if not channel or result.channel == channel:
-                self.database.increment_count(result.id)
+                result.last_seen = datetime.utcnow()
                 result.count += 1
+                self.database.increment_count(result.id)
                 return result
             url = result.url
 
