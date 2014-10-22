@@ -132,7 +132,7 @@ class LinkSql(db.LinkDb):
         query  = """SELECT url, user, count, first_seen as 'ts [timestamp]', """
         query += """title, CURRENT_TIMESTAMP as 'ts [timestamp]', alive, """
         query += """flags, private, type, description, shorturl, id, """
-        query += """channel, last_seen"""
+        query += """channel, last_seen """
         query += """FROM url WHERE %s = %s""" % (field, self.field_placeholder)
 
         args = [value]
