@@ -52,6 +52,7 @@ class LinkSqlite(sql.LinkSql):
                     self.close()
                     self.connect()
                 else:
+                    self.close()
                     raise
             else:
                 break
