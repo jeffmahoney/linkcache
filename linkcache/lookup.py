@@ -33,6 +33,8 @@ class Lookup:
         for tag in s.findAll('meta'):
             found = False
             for attr in tag.attrs:
+                if len(attr) < 2:
+                    continue
                 key = attr[0].lower
                 value = attr[1].lower
 
