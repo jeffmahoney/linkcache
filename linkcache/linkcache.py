@@ -31,7 +31,7 @@ class CodeError(Exception):
 ipAddressRegex = re.compile(r"^((((([0-9]{1,3})\.){3})([0-9]{1,3}))((\/[^\s]+)|))$")
 urlRegex = re.compile(r"(^|\s+)(([\|\$\!\~\^]+)|)(((([\w\-]+\.)+)([\w\-]+))(((/[\w\-\.%\(\)~]*)+)+|\s+|[\!\?\.,;]+|$)|https?://[^\]>\s]*)")
 selfRefRegex = re.compile(r"http://(www.|)ice-nine.org/(l|link.php)/([A-Za-z0-9]+)")
-httpUrlRegex = re.compile(r"(https?://[^\]>\s]+)", re.I)
+httpUrlRegex = re.compile(r"(([\|\$\!\~\^]+)|)(https?://[^\]>\s]+)", re.I)
 
 class LinkCache:
     def __init__(self, config):
@@ -214,12 +214,18 @@ class LinkCache:
         if mapped:
             line = mapped
 
-        match = urlRegex.search(line)
-        if match is None:
-            return None
-
-        url = match.group(4)
-        mods = match.group(2)
+        match = httpUrlRegex.search(line)
+        if match:
+            print match.groups()
+            url = match.group(3)
+            mods = match.group(1)
+        else:
+            match = urlRegex.search(line)
+            if match:
+                url = match.group(4)
+                mods = match.group(2)
+            else:
+                return None
 
         private = False
         flags = 0
