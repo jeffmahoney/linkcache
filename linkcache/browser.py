@@ -41,7 +41,7 @@ class SingletonBrowser:
             if passwords:
                 try:
                     f = open(passwords)
-                except IOerror, e:
+                except IOError, e:
                     if e.errno != errno.ENOENT:
                         raise
                     f = open(passwords, "w+")
