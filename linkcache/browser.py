@@ -5,6 +5,7 @@ import socket
 import os
 import csv
 import gzip
+import errno
 
 # This is a singleton browser implementation
 
@@ -38,7 +39,12 @@ class SingletonBrowser:
             socket.setdefaulttimeout(10)
 
             if passwords:
-                f = open(passwords)
+                try:
+                    f = open(passwords)
+                except IOerror, e:
+                    if e.errno != errno.ENOENT:
+                        raise
+                    f = open(passwords, "w+")
                 csvfile = csv.reader(f, delimiter=',', quotechar='"')
                 for row in csvfile:
                     self.add_password(*row)
