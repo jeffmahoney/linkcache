@@ -9,7 +9,6 @@ import os
 import importlib
 import ConfigParser
 from datetime import datetime
-import errno
 
 import database
 from result import LinkCacheResult
@@ -62,15 +61,6 @@ class LinkCache:
             cookies = None
         try:
             passwords = config['browser']['passwords']
-            try:
-                f = open(passwords, "r+")
-            except IOError, e:
-                # Create it if it doesn't exist
-                if e.errno == errno.ENOENT:
-                    f = open(passwords, "w+")
-                else:
-                    raise
-            f.close()
         except KeyError:
             passwords = None
 
