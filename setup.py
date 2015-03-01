@@ -14,6 +14,7 @@ setup(
         "mechanize",
         "soundcloud",
         "wolframalpha",
+        "beautifulsoup4",
     ],
 
     author = "Jeff Mahoney",
