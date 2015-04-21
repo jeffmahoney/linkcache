@@ -29,7 +29,7 @@ class CodeError(Exception):
     pass
 
 ipAddressRegex = re.compile(r"^((((([0-9]{1,3})\.){3})([0-9]{1,3}))((\/[^\s]+)|))$")
-urlRegex = re.compile(r"(^|\s+)(([\|\$\!\~\^]+)|)(((([\w\-]+\.)+)([\w\-]+))(((/[\w\-\.%\(\)~]*)+)+|\s+|[\!\?\.,;]+|$)|https?://[^\]>\s]*)")
+urlRegex = re.compile(r"(^|\s+)(([\|\$\!\~\^]+)|)(((([\w\-]+\.)+)([\w\-]+))(((/[\w\-\.%\(\)~\?=]*)+)+|\s+|[\!\?\.,;]+|$)|https?://[^\]>\s]*)")
 selfRefRegex = re.compile(r"http://(www.|)ice-nine.org/(l|link.php)/([A-Za-z0-9]+)")
 httpUrlRegex = re.compile(r"(([\|\$\!\~\^]+)|)(https?://[^\]>\s]+)", re.I)
 
