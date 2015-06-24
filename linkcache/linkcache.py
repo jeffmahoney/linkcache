@@ -216,7 +216,6 @@ class LinkCache:
 
         match = httpUrlRegex.search(line)
         if match:
-            print match.groups()
             url = match.group(3)
             mods = match.group(1)
         else:
