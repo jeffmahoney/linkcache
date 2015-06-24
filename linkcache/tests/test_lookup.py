@@ -63,6 +63,9 @@ class LookupTestCase(unittest.TestCase):
     def test_non_html(self):
         self.boilerplate("https://www.google.com/images/srpr/logo11w.png")
 
+    def test_self_signed(self):
+        self.boilerplate("https://jeffm.io")
+
 if __name__ == '__main__':
     unittest.main()
 

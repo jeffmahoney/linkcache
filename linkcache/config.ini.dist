@@ -29,6 +29,7 @@ password: password
 [browser]
 cookiejar: /path/to/cookies.txt
 passwords: /path/to/passwords.csv
+#capath: /path/to/ca-bundle/use/only/if/needed
 
 [wolframalpha]
 appid: appid

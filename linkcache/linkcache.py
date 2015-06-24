@@ -66,7 +66,12 @@ class LinkCache:
         except KeyError:
             passwords = None
 
-        self.browser = browser.Browser(cookies, passwords)
+        try:
+            capath = config['browser']['capath']
+        except KeyError:
+            capath = None
+
+        self.browser = browser.Browser(cookies, passwords, capath)
         db = config['general']['database']
 
         if db == 'sqlite3':

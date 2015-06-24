@@ -9,7 +9,7 @@ import gzip
 import errno
 
 class Browser:
-    def __init__(self, cookiejar=None, passwords=None):
+    def __init__(self, cookiejar=None, passwords=None, capath=None):
         self.passwords = []
         self.cookiejar = cookielib.MozillaCookieJar()
         if cookiejar:
@@ -37,12 +37,14 @@ class Browser:
         self.session = requests.Session()
         self.session.cookies = self.cookiejar
 
+        self.capath = capath
+
     def open(self, url, **kwargs):
         auth = None
         for rule in self.passwords:
             if rule[0][:len(url)] == url:
                 auth = (rule[1], rule[2])
-        r = self.session.get(url, auth=auth, cookies=self.cookiejar, headers=self.addheaders, **kwargs)
+        r = self.session.get(url, auth=auth, cookies=self.cookiejar, headers=self.addheaders, verify=self.capath, **kwargs)
         r.raise_for_status()
         if self.cookiejar.filename:
             self.cookiejar.save()
