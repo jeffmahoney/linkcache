@@ -11,7 +11,7 @@ import linkcache.helpers.urbandictionary
 class UrbanDictionaryTests(unittest.TestCase):
     def setUp(self):
         self.helper = linkcache.helpers.urbandictionary.instantiate(None)
-        self.browser = linkcache.browser.SingletonBrowser()
+        self.browser = linkcache.browser.Browser()
 
     def test_bad_match(self):
         link = "http://www.urbandictionary.com/defien.php?term=Jack+Move"

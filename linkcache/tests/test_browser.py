@@ -9,7 +9,7 @@ import linkcache.browser
 
 class BrowserTest(unittest.TestCase):
     def setUp(self):
-        self.browser = linkcache.browser.SingletonBrowser(None, "passwords.txt")
+        self.browser = linkcache.browser.Browser(None, "passwords.txt")
 
     def test_invalid_name(self):
         with self.assertRaises(urllib2.URLError):

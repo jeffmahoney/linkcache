@@ -8,7 +8,7 @@ from linkcache.helpers import youtube
 
 class YoutubeTestCase(unittest.TestCase):
     def setUp(self):
-        self.browser = browser.SingletonBrowser()
+        self.browser = browser.Browser()
         self.helper = youtube.instantiate(None)
 
     def test_matching(self):

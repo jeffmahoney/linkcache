@@ -12,7 +12,7 @@ import urllib2
 class ImgurTestCase(unittest.TestCase):
     def setUp(self):
         self.helper = linkcache.helpers.imgur.instantiate(None)
-        self.browser = browser.SingletonBrowser()
+        self.browser = browser.Browser()
 
     def test_link_to_image(self):
         ret = self.helper.match("http://imgur.com/askldjaklsd.jpg")

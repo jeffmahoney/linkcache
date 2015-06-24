@@ -15,7 +15,7 @@ class TwitterTestCase(unittest.TestCase):
         config.read('../../config.ini')
         conf = dict(config.items(twitterhelper.instantiate.config_section))
         self.helper = twitterhelper.instantiate(conf)
-        self.browser = browser.SingletonBrowser()
+        self.browser = browser.Browser()
 
     def test_nonstatus_match(self):
         link = "http://twitter.com/askldjaklsdx"

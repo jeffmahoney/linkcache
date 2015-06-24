@@ -17,7 +17,7 @@ class WolframAlphaTests(unittest.TestCase):
         config = ConfigParser.ConfigParser()
         config.read('../../config.ini')
         conf = dict(config.items(wolframalphahelper.instantiate.config_section))
-        self.browser = browser.SingletonBrowser()
+        self.browser = browser.Browser()
         self.helper = wolframalphahelper.instantiate(conf)
 
     @staticmethod

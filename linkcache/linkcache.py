@@ -64,7 +64,7 @@ class LinkCache:
         except KeyError:
             passwords = None
 
-        self.browser = browser.SingletonBrowser(cookies, passwords)
+        self.browser = browser.Browser(cookies, passwords)
         db = config['general']['database']
 
         if db == 'sqlite3':
@@ -99,7 +99,7 @@ class LinkCache:
             shortener_config = {}
 
         self.shortener = m.instantiate(shortener_config)
-        self.lookup = lookup.Lookup(config)
+        self.lookup = lookup.Lookup(config, self.browser)
 
         self.line_rewriters = []
         if 'rewriters' in config['general']:

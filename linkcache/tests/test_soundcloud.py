@@ -16,7 +16,7 @@ class SoundCloudTestCase(unittest.TestCase):
         config.read('../config.ini')
         conf = dict(config.items(soundcloudhelper.instantiate.config_section))
         self.helper = soundcloudhelper.instantiate(conf)
-        self.browser = browser.SingletonBrowser()
+        self.browser = browser.Browser()
 
     def test_not_track(self):
         link = "https://soundcloud.com/pages/contact"

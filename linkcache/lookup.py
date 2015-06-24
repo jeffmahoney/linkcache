@@ -6,10 +6,10 @@ import browser
 from bs4 import BeautifulSoup
 
 class Lookup:
-    def __init__(self, config):
+    def __init__(self, config, browser):
         self.config = config
         (self.helpers, self.mods) = helpers.load(config)
-        self.browser = browser.SingletonBrowser()
+        self.browser = browser
 
     def find_helper(self, url):
         for helper in self.helpers:

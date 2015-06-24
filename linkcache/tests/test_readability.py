@@ -11,7 +11,7 @@ import linkcache.helpers.readability
 class ReadabilityTests(unittest.TestCase):
     def setUp(self):
         self.helper = linkcache.helpers.readability.instantiate(None)
-        self.browser = linkcache.browser.SingletonBrowser()
+        self.browser = linkcache.browser.Browser()
 
     def test_bad_match(self):
         link = "https://www.readability.com/asdarticles/5kxlx1jw"
