@@ -55,7 +55,7 @@ class LookupTestCase(unittest.TestCase):
         self.boilerplate("macos 10.1", None)
 
     def test_interpolated_with_real_url(self):
-        print self.boilerplate("google.com hosts http://google.com/maps").url
+        self.assertTrue(self.boilerplate("google.com hosts http://google.com/maps").url == "http://google.com/maps")
 
 
 if __name__ == '__main__':
