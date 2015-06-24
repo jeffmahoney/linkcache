@@ -26,7 +26,7 @@ class ReadabilityTests(unittest.TestCase):
     def test_good_fetch(self):
         link = "https://www.readability.com/articles/ly6pnoqr"
         expected_target = "http://www.theguardian.com/commentisfree/2014/may/20/why-did-lavabit-shut-down-snowden-email"
-        expected_title = "Secrets, lies and Snowden's email: why I was forced to shut down Lavabit | Comment is free | theguardian.com"
+        expected_title = "Secrets, lies and Snowden's email: why I was forced to shut down Lavabit | Comment is free | The Guardian"
         ret = self.helper.fetch(self.browser, link)
 
         self.assertTrue('title' in ret)
