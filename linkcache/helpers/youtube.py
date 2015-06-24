@@ -5,7 +5,6 @@ from common import UrlHelper
 from urlparse import urlparse, parse_qs
 import re
 import string
-import urllib2
 from bs4 import BeautifulSoup
 
 class YoutubeHelper(UrlHelper):
@@ -49,9 +48,9 @@ class YoutubeHelper(UrlHelper):
             targetUrl = url
             targetUrl = re.sub("^https", "http", url)
 
-        target = urllib2.urlopen(targetUrl)
+        target = browser.open(targetUrl)
 
-        sO = BeautifulSoup(target.read())
+        sO = BeautifulSoup(target.text)
 
         title = sO.title.string + titleCharms
 

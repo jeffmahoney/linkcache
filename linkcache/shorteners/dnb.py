@@ -20,7 +20,7 @@ class DnbShortener(common.GenericShortener):
     def pre_shorten(self, url):
         url = urllib.quote(url)
         r = self.browser.open(self.apiurl % url)
-        dnburl = r.read().strip()
+        dnburl = r.text.strip()
         return dnburl
 
 instantiate = DnbShortener

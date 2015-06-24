@@ -2,24 +2,26 @@
 # -*- coding: utf-8 -*-,
 
 import HTMLParser
-import mechanize
-import urllib2
 import re
 import os
 import importlib
 import ConfigParser
+import requests
 from datetime import datetime
+from bs4 import BeautifulSoup
 
 import database
+
 from result import LinkCacheResult
 import lookup
 import browser
+
 
 F_SPOILERS = 0x4
 F_NSFW = 0x2
 F_MAYBE_NSFW = 0x1
 
-class LinkCacheHTTPError(urllib2.HTTPError):
+class LinkCacheHTTPError(requests.exceptions.HTTPError):
     pass
 
 class ConfigError(Exception):
@@ -147,12 +149,10 @@ class LinkCache:
                     return None
 
             if result.content_type is None:
-                header = self.browser.response().info()
+                header = r.headers
                 type = None
                 if 'Content-type' in header:
                     type = header['Content-type']
-                elif 'Content-Type' in header:
-                    type = header['Content-Type']
                 self.database.set_content_type(result.id, type)
                 result.content_type = type
 
@@ -175,7 +175,7 @@ class LinkCache:
                     'description' in info:
                     result.description = info['description']
                     self.database.set_description(result.id, result.description)
-        except urllib2.HTTPError, e:
+        except requests.exceptions.HTTPError, e:
             result.alive = 0
             try:
                 self.database.set_url_dead(result.id)
@@ -203,7 +203,7 @@ class LinkCache:
 
     def parse_line(self, line, user, update_count=True, channel=""):
         """
-        Typical exceptions: urllib2.HTTPError
+        Typical exceptions: requests.exceptions.HTTPError
         """
         interpolated = False
         title = None
@@ -294,33 +294,31 @@ class LinkCache:
         deferred_exception = None
         try:
             r = self.browser.open(url)
-            title = self.browser.title()
-            if title is not None:
-                title = " ".join(title.split())
-                title = unicode(title, self.browser.encoding())
+            parsed = BeautifulSoup(r.text)
+            if parsed.title:
+                title = parsed.title.string
 
-            header = r.info()
+            header = r.headers
             try:
-                charset = header.getparam('charset')
+                charset = r.encoding
             except:
                 pass
-            if 'Content-type' in header:
-                content_type = header['Content-type']
-            elif 'Content-Type' in header:
+            try:
                 content_type = header['Content-Type']
-        except urllib2.HTTPError, e:
+            except KeyError, e:
+                pass
+        except requests.exceptions.HTTPError, e:
             if interpolated:
                 return None
             if mapped is None:
                 raise
             deferred_exception = e
-        except urllib2.URLError, e:
+        except requests.exceptions.ConnectionError, e:
             if interpolated:
                 return None
             if mapped is None:
                 raise
             deferred_exception = e
-        except mechanize.BrowserStateError, e:
             title = ""
         except HTMLParser.HTMLParseError, e:
             title = ""
@@ -355,7 +353,7 @@ class LinkCache:
             raise deferred_exception
 
         if content_type and 'html' in content_type and not description:
-            description = self.lookup.get_html_description(r.read())
+            description = self.lookup.get_html_description(r.text)
 
         if description:
             if not isinstance(description, unicode):

@@ -4,7 +4,6 @@
 from common import UrlHelper
 from bs4 import BeautifulSoup
 import re
-import urllib2
 
 class ReadabilityHelper(UrlHelper):
     def __init__(self, config):
@@ -17,10 +16,9 @@ class ReadabilityHelper(UrlHelper):
         url = re.sub("/#!", "", url)
         url = re.sub("^https", "http", url)
         resp = browser.open(url)
-        html = resp.read()
-        s = BeautifulSoup(html)
+        s = BeautifulSoup(resp.text)
 
-        return {'title': s.title.string.strip(), 'url': resp.geturl() }
+        return {'title': s.title.string.strip(), 'url': resp.url }
 
 instantiate = ReadabilityHelper
 # vim:set shiftwidth=4 softtabstop=4 expandtab textwidth=79:

@@ -17,7 +17,7 @@ class UrbanDictionaryHelper(UrlHelper):
 
     def fetch(self, browser, url):
         r = browser.open(url)
-        s = BeautifulSoup(r.read())
+        s = BeautifulSoup(r.text)
 
         panel = s.find("div", {"class" : "def-panel"});
 

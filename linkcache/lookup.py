@@ -57,13 +57,13 @@ class Lookup:
             return None
 
         try:
-            if 'html' not in response.info()['Content-type']:
+            if 'html' not in response.headers['Content-type']:
                 return None
         except KeyError, e:
             return None
 
         try:
-            description = get_html_description(response.read())
+            description = get_html_description(response.text)
         except Exception, e:
             print >>sys.stderr, "General exception %s while getting HTML " \
                                 "description" % str(e)

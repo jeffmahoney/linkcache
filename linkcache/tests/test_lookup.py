@@ -6,9 +6,10 @@ import unittest
 import ConfigParser
 import ssl
 
-import linkcache.linkcache
+from bs4 import BeautifulSoup
 
-print linkcache.linkcache
+import linkcache.linkcache
+import requests
 
 class LookupTestCase(unittest.TestCase):
     def setUp(self):
@@ -41,6 +42,8 @@ class LookupTestCase(unittest.TestCase):
             self.boilerplate("https://173.194.46.115")
         except ssl.CertificateError, e:
             pass
+        except requests.exceptions.SSLError, e:
+            pass
 
     def test_interpolated_url(self):
         self.boilerplate("www.google.com")
@@ -57,6 +60,8 @@ class LookupTestCase(unittest.TestCase):
     def test_interpolated_with_real_url(self):
         self.assertTrue(self.boilerplate("google.com hosts http://google.com/maps").url == "http://google.com/maps")
 
+    def test_non_html(self):
+        self.boilerplate("https://www.google.com/images/srpr/logo11w.png")
 
 if __name__ == '__main__':
     unittest.main()

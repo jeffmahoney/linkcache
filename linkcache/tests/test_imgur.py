@@ -7,7 +7,7 @@ import unittest
 import linkcache
 import linkcache.helpers.imgur
 from linkcache import browser
-import urllib2
+import requests
 
 class ImgurTestCase(unittest.TestCase):
     def setUp(self):
@@ -24,7 +24,7 @@ class ImgurTestCase(unittest.TestCase):
 
     def test_missing_link(self):
         link = "http://imgur.com/askldjaklsd.jpg"
-        with self.assertRaises(urllib2.HTTPError):
+        with self.assertRaises(requests.exceptions.HTTPError):
             ret = self.helper.fetch(self.browser, link)
 
     def test_valid_link(self):

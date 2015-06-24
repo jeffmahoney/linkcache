@@ -6,7 +6,6 @@ import unittest
 import linkcache
 from linkcache.helpers import twitterhelper
 from linkcache import browser
-import urllib2
 import ConfigParser
 
 class TwitterTestCase(unittest.TestCase):

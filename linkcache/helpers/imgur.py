@@ -20,7 +20,7 @@ class ImgurHelper(UrlHelper):
         url = "http://imgur.com/gallery/%s" % (m.group(1))
 
         r = browser.open(url)
-        s = BeautifulSoup(r.read())
+        s = BeautifulSoup(r.text)
 
         title = s.title.string
         if title is not None:

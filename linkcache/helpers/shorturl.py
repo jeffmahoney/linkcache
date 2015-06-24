@@ -4,7 +4,6 @@
 from common import UrlHelper
 import re
 import string
-import urllib2
 from bs4 import BeautifulSoup
 
 class ShortUrlHelper(UrlHelper):
@@ -25,10 +24,10 @@ class ShortUrlHelper(UrlHelper):
         url = re.sub("/#!", "", url)
         url = re.sub("^https", "http", url)
 
-        target = urllib2.urlopen(url)
-        targeturl = target.geturl()
+        target = browser.open(url)
+        targeturl = target.url
 
-        sO = BeautifulSoup(target.read())
+        sO = BeautifulSoup(target.text)
 
         return {'title': sO.title.string, 'url': targeturl }
 
