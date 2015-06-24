@@ -23,7 +23,7 @@ class ResultTestCase(unittest.TestCase):
             'url' : url,
             'user' : 'user',
             'count' : 1,
-            'timestamp' : datetime.datetime.now(),
+            'first_seen' : datetime.datetime.now(),
             'title' : 'title',
             'request_timestamp' : datetime.datetime.now(),
             'alive' : True,
@@ -59,8 +59,8 @@ class ResultTestCase(unittest.TestCase):
         result = linkcache.result.LinkCacheResult(self.rdict)
         x = str(result)
 
-    def test_timestamp_type_check(self):
-        self.rdict['timestamp'] = None
+    def test_first_seen_type_check(self):
+        self.rdict['first_seen'] = None
         with self.assertRaises(AssertionError):
             result = linkcache.result.LinkCacheResult(self.rdict)
 
