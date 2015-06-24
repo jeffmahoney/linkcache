@@ -6,6 +6,10 @@ import mechanize
 
 import setup
 import linkcache.browser
+import json
+
+# These test cases could be considered to be testing httpbin.org, but
+# we need to have a target somewhere.
 
 class BrowserTest(unittest.TestCase):
     def setUp(self):
@@ -39,6 +43,15 @@ class BrowserTest(unittest.TestCase):
                         mechanize._response.response_seek_wrapper))
         headers = ret.info()
         self.assertFalse('Content-Encoding' in headers)
+
+    def test_cookies(self):
+        ret = self.browser.open("http://httpbin.org/cookies/set?testcase=working")
+        ret = self.browser.open("http://httpbin.org/cookies")
+        v = json.loads(ret.read())
+        self.assertTrue('cookies' in v)
+        self.assertTrue('testcase' in v['cookies'])
+        self.assertTrue(v['cookies']['testcase'] == 'working')
+
 
 if __name__ == '__main__':
     unittest.main()
