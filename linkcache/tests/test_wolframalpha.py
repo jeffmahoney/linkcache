@@ -48,7 +48,8 @@ class WolframAlphaTests(unittest.TestCase):
     def test_interpreted_expression(self):
         expression = "distance to the sun"
         ret = self.helper.fetch(self.browser, self.url(expression))
-        self.assertTrue(ret['description'] == 'Sun | distance from Earth: 1.014 au  (astronomical units)')
+        expected = "Earth | distance from Sun: 1.016 au  (astronomical units)"
+        self.assertTrue(ret['description'] == expected)
 
     def test_wolframalpha_junk(self):
         expression = "slksjdflasknenwnqwn;qlkne;qlkjeocina;sdnfasdf"
