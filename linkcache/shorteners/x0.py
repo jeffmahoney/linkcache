@@ -12,13 +12,12 @@ class x0Shortener(common.GenericShortener):
     apiurl = 'https://x0.no/api/?%s'
     def __init__(self, config):
         common.GenericShortener.__init__(self, config)
-        self.browser = linkcache.browser.SingletonBrowser()
+        self.browser = linkcache.browser.Browser()
 
     def self_reference(self, url):
         return selfRefRegex.search(url) is not None
 
     def pre_shorten(self, url):
-        url = urllib.quote(url)
         r = self.browser.open(self.apiurl % url)
         x0url = r.text.strip()
         return x0url
