@@ -18,6 +18,10 @@ class LookupTestCase(unittest.TestCase):
         ret = self.cache.call_rewriters("@google reference")
         self.assertTrue(ret == "http://www.google.com/search?hl=en&ie=ISO-8859-1&q=reference&btnI=I%27m+Feeling+Lucky")
 
+    def test_udic(self):
+        ret = self.cache.call_rewriters("@udic jack move")
+        self.assertTrue(ret == "http://www.urbandictionary.com/define.php?term=jack+move")
+
 if __name__ == '__main__':
     unittest.main()
 
