@@ -4,6 +4,7 @@
 from common import UrlHelper
 import re
 import mechanize
+from bs4 import BeautifulSoup
 
 class BurrowikiHelper(UrlHelper):
     config_section = "burrowiki"
@@ -18,19 +19,29 @@ class BurrowikiHelper(UrlHelper):
         br = browser
         r = browser.open(url)
 
-        if br.title().find("ogin required") != -1:
-            print "Logging into Burrowiki"
-            br.open(self.config['loginpage'])
-            br.select_form(name="userlogin")
-            br.select_form(name="userlogin")
-            br['wpName'] = self.config['user']
-            br['wpPassword'] = self.config['password']
-            br.find_control('wpRemember').items[0].selected = True
-            br.submit()
-            br.open(url)
+        s = BeautifulSoup(r.text)
+        if "ogin required" in str(s.title).lower():
+            params = {
+                'wpRemember' : 1,
+                'wpName' : self.config['user'],
+                'wpPassword' : self.config['password'],
+                'action' : 'submitlogin',
+                'type' : 'login',
+            }
+
+            # We need to get the login token
+            r = br.open(self.config['loginpage'])
+            s = BeautifulSoup(r.text)
+            for inp in s.find("form").findAll("input"):
+                if inp['name'] == "wpLoginToken":
+                    params['wpLoginToken'] = inp['value']
+
+            r = br.post(self.config['loginpage'], data=params)
+            r = br.open(url)
+            s = BeautifulSoup(r.text)
 
         return {
-            'description' : br.title(),
+            'description' : s.title.text,
             'url' : url
         }
 
