@@ -44,7 +44,7 @@ class Browser:
         for rule in self.passwords:
             if rule[0][:len(url)] == url:
                 auth = (rule[1], rule[2])
-        r = self.session.get(url, auth=auth,  headers=self.addheaders, **kwargs)
+        r = self.session.get(url, auth=auth,  headers=self.addheaders, verify=self.capath, **kwargs)
         r.raise_for_status()
         if self.cookiejar.filename:
             self.cookiejar.save()
@@ -55,7 +55,7 @@ class Browser:
         for rule in self.passwords:
             if rule[0][:len(url)] == url:
                 auth = (rule[1], rule[2])
-        r = self.session.post(url, auth=auth, headers=self.addheaders, **kwargs)
+        r = self.session.post(url, auth=auth, headers=self.addheaders, verify=self.capath, **kwargs)
         r.raise_for_status()
         if self.cookiejar.filename:
             self.cookiejar.save()
