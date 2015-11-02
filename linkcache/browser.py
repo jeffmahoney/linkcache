@@ -44,10 +44,22 @@ class Browser:
         for rule in self.passwords:
             if rule[0][:len(url)] == url:
                 auth = (rule[1], rule[2])
-        r = self.session.get(url, auth=auth,  headers=self.addheaders, verify=self.capath, **kwargs)
+        r = self.session.get(url, auth=auth, stream=True,
+                             headers=self.addheaders, verify=self.capath,
+                             **kwargs)
         r.raise_for_status()
         if self.cookiejar.filename:
             self.cookiejar.save()
+
+        # Requests doesn't natively support a limit on the content size.
+        # r.iter_content does and is used internally by Requests to assign
+        # to _content, which is used by the other helpers.  This violates
+        # the API but to do otherwise means duplicating what Requests does.
+        r._content = bytes()
+        for chunk in r.iter_content(10*1024*1024):
+            r._content += chunk
+            if len(r._content) >= 10*1024*1024:
+                break
         return r;
 
     def post(self, url, **kwargs):
@@ -55,10 +67,22 @@ class Browser:
         for rule in self.passwords:
             if rule[0][:len(url)] == url:
                 auth = (rule[1], rule[2])
-        r = self.session.post(url, auth=auth, headers=self.addheaders, verify=self.capath, **kwargs)
+        r = self.session.post(url, auth=auth, stream=True,
+                              headers=self.addheaders, verify=self.capath,
+                              **kwargs)
         r.raise_for_status()
         if self.cookiejar.filename:
             self.cookiejar.save()
+
+        # Requests doesn't natively support a limit on the content size.
+        # r.iter_content does and is used internally by Requests to assign
+        # to _content, which is used by the other helpers.  This violates
+        # the API but to do otherwise means duplicating what Requests does.
+        r._content = bytes()
+        for chunk in r.iter_content(10*1024*1024):
+            r._content += chunk
+            if len(r._content) >= 10*1024*1024:
+                break
         return r;
 
 if __name__ == '__main__':
